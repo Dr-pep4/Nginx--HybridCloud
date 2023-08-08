@@ -1,0 +1,24 @@
+name: OpenShift Build Trigger
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up OpenShift CLI
+        uses: redhat-actions/oc-setup@v1
+        with:
+          openshift-server: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift-token: ${{ secrets.OPENSHIFT_TOKEN }}
+          
+      - name: Trigger OpenShift Build
+        run: |
+          oc start-build nginx #
