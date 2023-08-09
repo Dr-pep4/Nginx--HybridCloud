@@ -31,5 +31,5 @@ jobs:
       - name: Log into OpenShift Cluster
         run: oc login ${{ secrets.OPENSHIFT_API_ENDPOINT }} --username ${{secrets.ROSA_ID}} --password ${{secrets.ROSA_PASSWORD}}
 
-      - name: Trigger OpenShift Build
-        run: oc start-build nginx --from-dir=project
+      - name: Deploy OpenShift Application
+        run: oc apply -f openshift/templates/nginx.json
