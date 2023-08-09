@@ -1,9 +1,9 @@
-name: OpenShift Build Trigger
+name: OpenShift Build
 
 on:
   push:
     branches:
-      - main
+      - main  # 트리거할 브랜치
 
 jobs:
   build:
@@ -14,18 +14,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up OpenShift CLI
-        run: |
-          # Install oc CLI
-          curl -L -o oc.tar.gz https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
-          tar xzf oc.tar.gz
-          sudo mv oc /usr/local/bin/
-          rm oc.tar.gz
-
-      - name: Log in to OpenShift
-        run: |
-          oc login ${{ secrets.OPENSHIFT_SERVER }} --token=${{ secrets.OPENSHIFT_TOKEN }}
+        uses: redhat-actions/openshift-cli@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
 
       - name: Trigger OpenShift Build
-        run: |
-          oc start-build nginx --namespace=front
+        run: oc start-build nginx --from-dir=project
 
