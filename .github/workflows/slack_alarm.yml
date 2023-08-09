@@ -55,7 +55,7 @@ jobs:
                 }
               ]
             }
-          status: ${{ job.status }}
+    
           author_name: www-be
           fields: repo,commit,action,eventName  # 원하는 정보만 남기고 나머지 정보 제거
           if_mention: failure,cancelled
