@@ -18,6 +18,9 @@ jobs:
         with:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
           openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          
+          
+     
       - name: Set up OpenShift Configuration
         run: |
           mkdir -p $HOME/.kube
@@ -25,6 +28,8 @@ jobs:
         env:
           OPENSHIFT_CONFIG: ${{ secrets.OPENSHIFT_CONFIG }}
 
+      - name: Log into OpenShift Cluster
+        run: oc login ${{ secrets.OPENSHIFT_SERVER_URL }} --token=${{ secrets.OPENSHIFT_TOKEN }}
 
       - name: Trigger OpenShift Build
         run: oc start-build nginx --from-dir=project
