@@ -11,52 +11,8 @@ jobs:
       - name: action-slack
         uses: 8398a7/action-slack@v3
         with:
-          custom_payload : |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "New commit added! Check it out.",
-                    "emoji": true
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "Check New Commit!",
-                        "emoji": true
-                      },
-                      "value": "${{ env.COMMIT_LINK }}",
-                      "action_id": "actionId-0"
-                    }
-                  ]
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "dispatch_action": true,
-                  "type": "input",
-                  "element": {
-                    "type": "plain_text_input",
-                    "action_id": "plain_text_input-action"
-                  },
-                  "label": {
-                    "type": "plain_text",
-                    "text": "Label",
-                    "emoji": true
-                  }
-                }
-              ]
-            }
-    
-          author_name: www-be
+          status: ${{ job.status }}
+          author_name: check-commit!
           fields: repo,commit,action,eventName  # 원하는 정보만 남기고 나머지 정보 제거
           if_mention: failure,cancelled
         env:
