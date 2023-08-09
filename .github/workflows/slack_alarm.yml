@@ -12,7 +12,7 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          author_name: check-commit!
+          author_name: check-commit! 한국어되나
           fields: repo,commit,action,eventName  # 원하는 정보만 남기고 나머지 정보 제거
           if_mention: failure,cancelled
         env:
