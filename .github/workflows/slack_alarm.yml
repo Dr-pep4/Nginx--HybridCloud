@@ -8,17 +8,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: 8398a7/action-slack@v3
-        with:
-          status: custom
-          fields: workflow,job,commit,repo,ref,author,took
-          custom_payload: |
-            {
-              attachments: [{
-                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} ${{ job.status }} in ${process.env.AS_TOOK}`,
+    - uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        custom_payload: |
+          {
+            text: "Custom Field Check",
+            attachments: [{
+              "author_name": "8398a7@action-slack", // json
+              fallback: 'fallback',
+              color: 'good',
+              title: 'CI Result',
+              text: 'Succeeded',
+              fields: [{
+                title: 'lower case',
+                value: 'LOWER CASE CHECK'.toLowerCase(),
+                short: true
+              },
+              {
+                title: 'reverse',
+                value: 'gnirts esrever'.split('').reverse().join(''),
+                short: true
+              },
+              {
+                title: 'long title1',
+                value: 'long value1',
+                short: false
+              }],
+              actions: [{
               }]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always() # Pick up events even if the job fails or is canceled.
+            }]
+          }        
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
