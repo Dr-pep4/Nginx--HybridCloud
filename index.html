@@ -34,14 +34,14 @@
     </style>
 </head>
 <body>
-    <div class="fade-container" style="background-size: cover; width:">
+  <div class="fade-container" style="background-size: cover; width:">
         <img class="fade-in-image" src="https://images.pexels.com/photos/5872181/pexels-photo-5872181.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Fading Image">
     </div>
 </body>
 <script>
      setTimeout(function() {
         window.location.href = "/main";
-    }, 10000);
+    }, 100000);
     const fadeImage = document.querySelector('.fade-in-image');
 
 fadeImage.style.transition = 'opacity 5s';
