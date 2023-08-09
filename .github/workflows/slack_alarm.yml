@@ -1,0 +1,68 @@
+name: Slack Notification
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          custom_payload : |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "New commit added! Check it out.",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Check New Commit!",
+                        "emoji": true
+                      },
+                      "value": "${{ env.COMMIT_LINK }}",
+                      "action_id": "actionId-0"
+                    }
+                  ]
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "dispatch_action": true,
+                  "type": "input",
+                  "element": {
+                    "type": "plain_text_input",
+                    "action_id": "plain_text_input-action"
+                  },
+                  "label": {
+                    "type": "plain_text",
+                    "text": "Label",
+                    "emoji": true
+                  }
+                }
+              ]
+            }
+          status: ${{ job.status }}
+          author_name: www-be
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          if_mention: failure,cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
+
+      - name: Get Commit Link
+        id: commit_link
+        run: echo "COMMIT_LINK=https://github.com/${{ github.repository }}/commit/${{ github.sha }}" >> $GITHUB_ENV
