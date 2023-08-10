@@ -12,8 +12,8 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          author_name: check-commit! 한국어되나
-          fields: repo,commit,action,eventName  # 원하는 정보만 남기고 나머지 정보 제거
+          author_name: 나중에 이거 풀리퀘스트로 받으면 된다능
+          fields: repo,commit,action,eventName,timestamp  # 원하는 정보만 남기고 나머지 정보 제거
           if_mention: failure,cancelled
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
