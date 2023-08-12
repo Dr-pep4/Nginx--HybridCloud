@@ -31,42 +31,12 @@
     </style>
 </head>
 <body>
-    <div id="data-container"> 아 여기에 대기열 나오면 개꿀인데</div>
+    
     <div class="fade-container" style="background-size: cover;">
         <img class="fade-in-image" src="https://images.pexels.com/photos/5872181/pexels-photo-5872181.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Fading Image">
     </div>
     <script>
-        const apiEndpoint = 'https://qxqgrvwiw1.execute-api.ap-northeast-1.amazonaws.com/readtQue';
-
-        async function fetchData() {
-            try {
-                const response = await fetch(apiEndpoint);
-                const data = await response.json();
-                displayData(data);
-            } catch (error) {
-                console.error('데이터를 가져오는 중 오류 발생:', error);
-            }
-        }
-
-        function displayData(data) {
-            const dataContainer = document.getElementById('data-container');
-            dataContainer.innerHTML = '';
-
-            if (Array.isArray(data)) {
-                data.forEach(item => {
-                    const listItem = document.createElement('div');
-                    listItem.textContent = `ID: ${item.id}, 내용: ${item.content}`;
-                    dataContainer.appendChild(listItem);
-                });
-            } else {
-                const errorItem = document.createElement('div');
-                errorItem.textContent = '데이터를 가져올 수 없습니다.';
-                dataContainer.appendChild(errorItem);
-            }
-        }
-
         window.onload = function() {
-            fetchData();
             const fadeImage = document.querySelector('.fade-in-image');
             fadeImage.style.transition = 'opacity 5s';
             fadeImage.style.opacity = 1;
