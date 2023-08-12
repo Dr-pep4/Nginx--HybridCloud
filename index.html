@@ -3,41 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>My Web App</title>
-      <style>
+    <style>
         body {
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: white;
-}
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: white;
+        }
 
-.fade-container {
-    position: relative;
-    width: 100% ;/* Adjust as needed */
-    height: 100%;; /* Adjust as needed */
-    overflow: hidden;
-}
+        .fade-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
 
-.fade-in-image {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-}
-
+        .fade-in-image {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
     </style>
 </head>
 <body>
     <div id="data-container"> 아 여기에 대기열 나오면 개꿀인데</div>
-    <div class="fade-container" style="background-size: cover; width:">
+    <div class="fade-container" style="background-size: cover;">
         <img class="fade-in-image" src="https://images.pexels.com/photos/5872181/pexels-photo-5872181.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Fading Image">
     </div>
     <script>
-        const apiEndpoint = 'https://qxqgrvwiw1.execute-api.ap-northeast-1.amazonaws.com/readtQue'; // 자신의 API Gateway 엔드포인트로 대체
+        const apiEndpoint = 'https://qxqgrvwiw1.execute-api.ap-northeast-1.amazonaws.com/readtQue';
 
         async function fetchData() {
             try {
@@ -53,31 +52,29 @@
             const dataContainer = document.getElementById('data-container');
             dataContainer.innerHTML = '';
 
-            data.forEach(item => {
-                const listItem = document.createElement('div');
-                listItem.textContent = `ID: ${item.id}, 내용: ${item.content}`;
-                dataContainer.appendChild(listItem);
-            });
+            if (Array.isArray(data)) {
+                data.forEach(item => {
+                    const listItem = document.createElement('div');
+                    listItem.textContent = `ID: ${item.id}, 내용: ${item.content}`;
+                    dataContainer.appendChild(listItem);
+                });
+            } else {
+                const errorItem = document.createElement('div');
+                errorItem.textContent = '데이터를 가져올 수 없습니다.';
+                dataContainer.appendChild(errorItem);
+            }
         }
 
-        // 페이지 로딩 시 데이터를 가져옴
-        fetchData();
+        window.onload = function() {
+            fetchData();
+            const fadeImage = document.querySelector('.fade-in-image');
+            fadeImage.style.transition = 'opacity 5s';
+            fadeImage.style.opacity = 1;
 
-     
-    
-    
-     setTimeout(function() {
-        window.location.href = "/main";
-    }, 100000);
-    const fadeImage = document.querySelector('.fade-in-image');
-
-fadeImage.style.transition = 'opacity 5s';
-
-window.addEventListener('load', () => {
-    fadeImage.style.opacity = 1;
-});
-
+            setTimeout(function() {
+                window.location.href = "/main";
+            }, 100000);
+        };
     </script>
 </body>
 </html>
-
