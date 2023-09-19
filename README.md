@@ -1,11 +1,4 @@
-# Nginx 설정, index.html
-
-
-
-
-
-
-
+# index.html, Nginx.conf
 
 
 #### index.html
@@ -24,3 +17,8 @@
                 window.location.href = "/main";
             }, 10000);
         };
+
+
+### Nginx.conf
+- 
+  
