@@ -24,7 +24,8 @@ window.onload = function() {
 };
 ```
 
-
+<line>
+    
 ### Nginx.conf
 
 - 웹 서비스의 flow chart
@@ -65,3 +66,79 @@ location /login{
         }
 ```
   
+<line>
+    
+## Git Action
+.github/workflows 디렉토리에서 '.yml' 파일로 설정
+
+### 1. commit 감지 후 openshift에서 자동 배포
+
+```
+name: OpenShift Build
+
+on:
+  push:
+    branches:
+      - main  # 트리거할 브랜치
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repositoy
+        uses: actions/checkout@v2
+      
+      - name: Set up OpenShift CLI
+        uses: redhat-actions/oc-installer@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
+          openshift_token: ${{ secret.OPENSHIFT_TOKEN }}
+          
+          
+     
+      - name: Set up OpenShift Configuration
+        run: |
+          mkdir -p $HOME/.kube
+          echo "$OPENSHIFT_CONFIG" > $HOME/.kube/config
+        env:
+          OPENSHIFT_CONFIG: ${{ secrets.OPENSHIFT_CONFIG }}
+
+      - name: Log into OpenShift Cluster
+        run: oc login ${{ secrets.OPENSHIFT_API_ENDPOINT }} --username ${{secrets.ROSA_ID}} --password ${{secrets.ROSA_PASSWORD}}
+
+      - name: Deploy OpenShift Application
+        run: oc start-build nginx --from-dir=$GITHUB_WORKSPACE
+``` 
+<line>
+    
+### 2. commit 감지 후 Webhook URL로 연동된 슬랙 채널에 알림
+    
+```
+name: Slack Notification
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set event timestamp
+        id: event_timestamp
+        run: echo "::set-output name=timestamp::$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+      
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: You can get this as a pull request later
+          fields: repo,commit,action,eventName,timestamp
+          if_mention: failure, canceled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
+```
+<line>
+
