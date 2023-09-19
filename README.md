@@ -39,5 +39,29 @@ window.onload = function() {
 |backend|경품 정보 입력|/enroll|
 
 
+- proxy_pass에  upstream의 server URL을 지정하여 재사용시 upstream만을 수정할 수 있게 하여 재사용성 확보
+```
+upstream frontend {
+    server jetty-public-front.apps.rosa-clu-07.q168.p1.openshiftapps.com;
+    }
 
+
+
+    # backend를 담당할 private cloud에서의 pod에 라우팅된 도메인을 backend로 지정
+
+upstream backend {
+    server jetty-private-backend.apps.team2-onprem.q168.p1.openshiftapps.com;
+    }
+
+ location /main {
+             proxy_pass http://frontend/user_main.jsp;
+             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+             proxy_read_timeout 180s; 
+        }
+
+location /login{
+             proxy_pass http://backend/admin_login.jsp;
+             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+```
   
