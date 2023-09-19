@@ -32,15 +32,25 @@
 </head>
 <body>
     
+    <!-- 처음 도메인 진입시 Nginx에서 이미지 출력 S3 Bucket에서 객체 가져오기 -->
+    
     <div class="fade-container" style="background-size: cover;">
         <img class="fade-in-image" src="https://recaimagebucket.s3.ap-northeast-1.amazonaws.com/image/mainlogo.png" alt="Fading Image">
     </div>
     <script>
+
+        //웹페이지 로드시 처음 배경을 흰색으로 하고 opacity가 0에서 1로 5초동안 서서히 증가하여 배경 이미지가 드러남
+
+        
         window.onload = function() {
             const fadeImage = document.querySelector('.fade-in-image');
             fadeImage.style.transition = 'opacity 5s';
             fadeImage.style.opacity = 1;
 
+            
+        //10초뒤 지정해놓은 엔드포인트 /main으로 이동
+
+            
             setTimeout(function() {
                 window.location.href = "/main";
             }, 10000);
